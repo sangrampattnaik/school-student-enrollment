@@ -13,6 +13,9 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = "__all__"
+        extra_kwargs = {
+            "password": {"write_only": True}
+        }
 
     def create(self, validated_data):
         validated_data["password"] = make_password(
@@ -22,9 +25,14 @@ class SchoolSerializer(serializers.ModelSerializer):
 
 
 class StudentSerializer(serializers.ModelSerializer):
+    school_name = serializers.SerializerMethodField('get_school_details',read_only=True)
+
     class Meta:
         model = Student
         fields = "__all__"
+        extra_kwargs = {
+            "password": {"write_only": True}
+        }
 
     def validate(self, attrs):
         grade = attrs.get("grade", 0)
@@ -37,3 +45,7 @@ class StudentSerializer(serializers.ModelSerializer):
             validated_data["password"]
         )  # password hasnhing
         return super().create(validated_data)
+    
+    
+    def get_school_details(self,obj):
+        return SchoolSerializer(obj.school_id).data

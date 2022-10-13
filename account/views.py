@@ -70,3 +70,11 @@ class StudentCreateAPIView(generics.ListCreateAPIView):
 
         serializer.save()
         return response.Response(serializer.data, status=201)
+
+class ProfileAPIView(generics.GenericAPIView):
+    authentication_classes = [JWTAuth]
+
+    def get(self, request, *args, **kwargs):
+        # breakpoint()
+        serializer = StudentSerializer if request.auth['user_type'] != 'school' else SchoolSerializer
+        return response.Response(serializer(request.user).data)
