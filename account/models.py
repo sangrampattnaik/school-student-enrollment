@@ -9,6 +9,9 @@ class School(models.Model):
     city = models.CharField(max_length=50)
     pin = models.CharField(max_length=6)
     password = models.CharField(max_length=255)
+    
+    def __str__(self) -> str:
+        return self.name
 
 
 class Student(models.Model):

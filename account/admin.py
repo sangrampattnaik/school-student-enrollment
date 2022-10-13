@@ -11,3 +11,18 @@ class SchoolAdmin(admin.ModelAdmin):
         "city",
         "pin",
     ]
+
+
+@admin.register(models.Student)
+class StudentAdmin(admin.ModelAdmin):
+    list_display = [
+        "username",
+        "name",
+        "grade",
+        "school_name",
+    ]
+    list_filter = ['grade']
+    
+    
+    def school_name(self,obj):
+        return obj.school_id
